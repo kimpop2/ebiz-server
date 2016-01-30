@@ -1,0 +1,287 @@
+<ion-view>
+  <ion-nav-title>
+    <span>급상여 명세서</span>
+  </ion-nav-title>
+  <ion-nav-buttons side="right">
+      <a class="button button-icon icon ion-ios-telephone" href="tel:{{call_salary}}"></a>  
+  </ion-nav-buttons>
+
+  <ion-content>
+    <!-- Refresh to get the new posts -->
+    <ion-refresher pulling-text="당겨서 놓으면 자료를 다시 가져옵니다." on-refresh="doRefresh()">
+    </ion-refresher>
+    <ion-slide-box slide-tabs-scrollable="false" show-pager="false" ion-slide-tabs>
+      <!-- ------------------------------------------------------- -->
+      <!-- 급여                                                    -->
+      <!-- ------------------------------------------------------- -->
+      <ion-slide ion-slide-tab-label="급여" class="mobp-view">
+        <div class="box">
+          <div class="row caption">
+            <div class="col col-20 data-left">
+              <a class="button button-icon button-small icon ion-android-arrow-dropleft-circle" ng-click="prevSalary()"></a>
+            </div>
+            <div class="col append">{{month | tmonth: '0'}} 급여</div>
+            <div class="col append col-20 data-right">
+              <a class="button button-icon button-small icon ion-android-arrow-dropright-circle" ng-click="nextSalary()"></a>
+            </div>
+          </div>
+        </div>
+
+        <div class="box">
+          <div class="row">
+            <div class="col col-50 data-title">총수령액</div>
+            <div class="col        data-title data-right">{{salary.total_income | number:0}}</div>
+            <div class="col col-10 append data-left">원</div>
+          </div>
+          <div class="row">
+            <div class="col col-50 data-title assertive">공제합계</div>
+            <div class="col        data-title data-right assertive">{{salary.total_deduct | number:0}}</div>
+            <div class="col col-10 append data-left assertive">원</div>
+          </div>
+          <div class="row title">
+            <div class="col col-50 data-title positive">실수령액</div>
+            <div class="col        data-title data-right positive">{{salary.net_income | number:0}}</div>
+            <div class="col col-10 append data-left positive">원</div>
+          </div>
+        </div>
+
+        <div class="row row-no-padding" ng-if="!salary.total_income" >
+          <div class="col">
+            <div class="box" >
+              <div class="row message">
+                <div class="col">자료가 없습니다.</div>
+              </div>
+            </div>  
+          </div>
+        </div>
+        <div class="row row-no-padding" ng-if="salary.total_income" >
+          <div class="col">
+            <div class="box">
+              <div class="row title">
+                <div class="col">급여내역</div>
+              </div>
+              <div class="row">
+                <div class="col col-50 data-label">기본급</div>
+                <div class="col col-50 data-right">{{salary.pay_base | number:0}}</div>
+              </div>
+              <div class="row">
+                <div class="col col-50 data-label">주특</div>
+                <div class="col col-50 data-right">{{salary.allow_ot1_time | number:0}}</div>
+              </div>
+              <div class="row">
+                <div class="col col-50 data-label">야특</div>
+                <div class="col col-50 data-right">{{salary.allow_ot2_time | number:0}}</div>
+              </div>
+              <div class="row">
+                <div class="col col-50 data-label">유급</div>
+                <div class="col col-50 data-right">{{salary.allow_paid1_time | number:0}}</div>
+              </div>
+              <div class="row">
+                <div class="col col-50 data-label">야근</div>
+                <div class="col col-50 data-right">{{salary.allow_night_time | number:0}}</div>
+              </div>
+              <div class="row">
+                <div class="col col-50 data-label">추가유급</div>
+                <div class="col col-50 data-right">{{salary.allow_paid2_time | number:0}}</div>
+              </div>
+              <div class="row">
+                <div class="col col-50 data-label">휴일근무</div>
+                <div class="col col-50 data-right">{{salary.allow_week1_time | number:0}}</div>
+              </div>
+              <div class="row">
+                <div class="col col-50 data-label">휴일연장</div>
+                <div class="col col-50 data-right">{{salary.allow_week2_time | number:0}}</div>
+              </div>
+              <div class="row">
+                <div class="col col-50 data-label">전월발란스</div>
+                <div class="col col-50 data-right">{{salary.last_balance_income | number:0}}</div>
+              </div>
+              <div class="row">
+                <div class="col col-50 data-label">기타소득</div>
+                <div class="col col-50 data-right">{{salary.user_defined_income | number:0}}</div>
+              </div>
+              <div class="row">
+                <div class="col col-50 data-label">직책수당</div>
+                <div class="col col-50 data-right">0</div>
+              </div>
+              <div class="row">
+                <div class="col col-50 data-label">상여금</div>
+                <div class="col col-50 data-right">{{bonustotal | number:0}}</div>
+              </div>
+            </div><!-- end box -->
+          </div><!-- end 1st col -->
+          <div class="col">
+            <div class="box">
+              <div class="row title">
+                <div class="col assertive">공제내역</div>
+              </div>
+              <div class="row">
+                <div class="col col-50 data-label">근로소득세</div>
+                <div class="col col-50 data-right">{{salary.tax_income | number:0}}</div>
+              </div>
+              <div class="row">
+                <div class="col col-50 data-label">지방소득세</div>
+                <div class="col col-50 data-right">{{salary.tax_residence | number:0}}</div>
+              </div>
+              <div class="row">
+                <div class="col col-50 data-label">국민연금</div>
+                <div class="col col-50 data-right">{{salary.nation_pension | number:0}}</div>
+              </div>
+              <div class="row">
+                <div class="col col-50 data-label">건강보험</div>
+                <div class="col col-50 data-right">{{salary.fee_medical_insurance | number:0}}</div>
+              </div>
+              <div class="row">
+                <div class="col col-50 data-label">고용보험</div>
+                <div class="col col-50 data-right">{{salary.fee_hire_insurance | number:0}}</div>
+              </div>
+              <div class="row">
+                <div class="col col-50 data-label">식대</div>
+                <div class="col col-50 data-right">{{salary.fee_meail | number:0}}</div>
+              </div>
+              <div class="row">
+                <div class="col col-50 data-label">전월발란스</div>
+                <div class="col col-50 data-right">0</div>
+              </div>
+              <div class="row">
+                <div class="col col-50 data-label">기타공제</div>
+                <div class="col col-50 data-right">{{salary.user_defined_deduct | number:0}}</div>
+              </div>
+              <div class="row title">
+                <div class="col col-50 data-label assertive">공제</div>
+                <div class="col col-50 data-right">0</div>
+              </div>
+              <div class="row">
+                <div class="col col-50 data-label">년월차수당</div>
+                <div class="col col-50 data-right">0</div>
+              </div>
+              <div class="row">
+                <div class="col col-50 data-label">생산성향상</div>
+                <div class="col col-50 data-right">0</div>
+              </div>
+            </div><!-- end box -->
+            <!-- fit height -->
+            <div class="row">
+              <div class="col">&nbsp;</br></div>
+            </div>
+          </div><!-- end 2nd col -->
+          
+        </div>
+      </ion-slide>
+
+      <!-- ------------------------------------------------------- -->
+      <!-- 상여                                                    -->
+      <!-- ------------------------------------------------------- -->
+      <ion-slide ion-slide-tab-label="상여" class="mobp-view">
+        <div class="box">
+          <div class="row caption">
+            <div class="col col-20 data-left">
+              <a class="button button-icon button-small icon ion-android-arrow-dropleft-circle" ng-click="prevSalary()"></a>
+            </div>
+            <div class="col append">{{month | tmonth: '0'}} 상여</div>
+            <div class="col append col-20 data-right">
+              <a class="button button-icon button-small icon ion-android-arrow-dropright-circle" ng-click="nextSalary()"></a>
+            </div>
+          </div>
+        </div>
+
+        <div class="box">
+          <div class="row sum">
+            <div class="col col-67">상여합계</div>
+            <div class="col data-right">{{bonustotal | number:0}}</div>
+          </div>
+          <div class="row message" ng-show="bonuses.length == 0">
+            <div class="col">자료가 없습니다.</div>
+          </div>
+          <div class="row" ng-repeat="bonus in bonuses">
+            <div class="col col-67 data-desc">{{bonus.bonus_name}}</div>
+            <div class="col  data-right">{{bonus.bonus_amount | number:0 }}</div>
+          </div>
+        </div>
+      </ion-slide>
+      
+      <!-- ------------------------------------------------------- -->
+      <!-- 월근태                                                  -->
+      <!-- ------------------------------------------------------- -->
+      <ion-slide ion-slide-tab-label="월근태" class="mobp-view">
+        <div class="box">
+          <div class="row caption">
+            <div class="col col-20 data-left">
+              <a class="button button-icon button-small icon ion-android-arrow-dropleft-circle" ng-click="prevSalary()"></a>
+            </div>
+            <div class="col append">{{month | tmonth: '0'}} 마감 근태현황</div>
+            <div class="col append col-20 data-right">
+              <a class="button button-icon button-small icon ion-android-arrow-dropright-circle" ng-click="nextSalary()"></a>
+            </div>
+          </div>
+        </div>
+        <div class="row row-no-padding" ng-if="!monthlyduty.time_nor_time" >
+          <div class="col col-offset-10 col-80">
+            <div class="box" >
+              <div class="row message">
+                <div class="col">자료가 없습니다.</div>
+              </div>
+            </div>  
+            <div class="row">
+              <div class="col" style="height:450px;">
+              </div>  
+            </div>      
+          </div>
+        </div>
+
+        <div class="row row-no-padding" ng-if="monthlyduty.time_nor_time">
+          <div class="col col-offset-10 col-80">
+            <div class="box">
+              <div class="row sum">
+                <div class="col col-67">합계</div>
+                <div class="col data-right">
+                  {{ (monthlyduty.time_nor_time + 
+                      monthlyduty.time_ot1_time + monthlyduty.time_ot2_time +
+                      monthlyduty.time_night_time + 
+                      monthlyduty.time_week1_time + monthlyduty.time_week2_time +
+                      monthlyduty.time_paid1_time + monthlyduty.time_paid2_time +
+                      monthlyduty.time_allowed_time ) | number:0 }}
+                </div>
+              </div>
+              <div class="row">
+                <div class="col col-67 data-label">평근시간</div>
+                <div class="col data-right">{{monthlyduty.time_nor_time | number:0}}</div>
+              </div>
+              <div class="row">
+                <div class="col col-67 data-label">주특시간</div>
+                <div class="col data-right">{{monthlyduty.time_ot1_time | number:0}}</div>
+              </div>
+              <div class="row">
+                <div class="col col-67 data-label">야특시간</div>
+                <div class="col data-right">{{monthlyduty.time_ot2_time | number:0}}</div>
+              </div>
+              <div class="row">
+                <div class="col col-67 data-label">야근시간</div>
+                <div class="col data-right">{{monthlyduty.time_night_time | number:0}}</div>
+              </div>
+              <div class="row">
+                <div class="col col-67 data-label">휴일1시간</div>
+                <div class="col data-right">{{monthlyduty.time_week1_time | number:0}}</div>
+              </div>
+              <div class="row">
+                <div class="col col-67 data-label">휴일2시간</div>
+                <div class="col data-right">{{monthlyduty.time_week2_time | number:0}}</div>
+              </div>
+              <div class="row">
+                <div class="col col-67 data-label">유급시간</div>
+                <div class="col data-right">{{monthlyduty.time_paid1_time | number:0}}</div>
+              </div>
+              <div class="row">
+                <div class="col col-67 data-label">추가유급</div>
+                <div class="col data-right">{{monthlyduty.time_paid2_time | number:0}}</div>
+              </div>
+              <div class="row">
+                <div class="col col-67 data-label">출장시간외</div>
+                <div class="col data-right">{{monthlyduty.time_allowed_time | number:0}}</div>
+              </div>
+            </div><!-- end box -->
+          <div><!-- end col-offset-10 col-80 -->
+      </ion-slide>
+    </ion-slide-box>
+  </ion-content>
+</ion-view>

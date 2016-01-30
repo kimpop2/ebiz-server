@@ -1,0 +1,36 @@
+<ion-side-menus enable-menu-with-back-views="false">
+  <ion-side-menu-content class="post-size-14px">
+    <ion-nav-bar class="bar app-top-bar">
+      <ion-nav-back-button>
+      </ion-nav-back-button>
+      <ion-nav-buttons side="left">
+        <button class="button button-icon button-clear ion-navicon" menu-toggle="left">
+        </button>
+      </ion-nav-buttons>
+    </ion-nav-bar>
+    <ion-nav-view name="menuContent"></ion-nav-view>
+  </ion-side-menu-content>
+
+  <ion-side-menu side="left" class="main-menu" expose-aside-when="large">
+    <ion-content>
+      <ion-list>
+        <ion-item class="item" nav-clear menu-close ui-sref="app.profile">
+          <h2 class="greeting" style="color:#ffffff">{{userinfo.empname}} ({{userinfo.role}})</h2>
+          <p class="message"   style="color:#ffffff">{{userinfo.empno}}</p>
+        </ion-item>
+        <ion-item class="item-icon-left" nav-clear menu-close ui-sref="app.home" >
+          <i class="icon ion-home"></i>
+          <h2 class="menu-text">홈으로</h2>
+        </ion-item>
+        <ion-item class="item-icon-left" nav-clear menu-close ui-sref="" ng-click="logout()">
+          <i class="icon ion-log-out"></i>
+          <h2 class="menu-text">로그아웃</h2>
+        </ion-item>
+        <!-- <ion-item class="item-icon-left" nav-clear menu-close ui-sref="app.settings">
+          <i class="icon ion-gear-a"></i>
+          <h2 class="menu-text">설정</h2>
+        </ion-item> -->
+    </ion-list>
+    </ion-content>
+  </ion-side-menu>
+</ion-side-menus>

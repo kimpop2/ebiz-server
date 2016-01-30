@@ -1,0 +1,338 @@
+<ion-view>
+  <ion-nav-title>
+    <span>근태현황</span>
+  </ion-nav-title>
+  <ion-nav-buttons side="right">
+    <ionic-datepicker input-obj="datepickerObject" class="button button-icon icon ion-ios-search icon-right">
+    </ionic-datepicker>
+  </ion-nav-buttons>
+  <ion-content>
+    <!-- Refresh to get the new posts -->
+    <ion-refresher pulling-text="당겨서 놓으면 자료를 다시 가져옵니다." on-refresh="doRefresh()">
+    </ion-refresher>
+    <ion-slide-box slide-tabs-scrollable="false" show-pager="false" ion-slide-tabs>
+      <!-- ------------------------------------------------------- -->
+      <!-- 근태현황                                                -->
+      <!-- ------------------------------------------------------- -->
+      <ion-slide ion-slide-tab-label="근태현황" class="mobp-view">
+        <div class="box">
+          <div class="row caption">
+            <div class="col col-20 data-left">
+              <a class="button button-icon button-small icon ion-android-arrow-dropleft-circle" ng-click="prevDailyduty()"></a>
+            </div>
+            <div class="col append">{{dutyday}} 근태현황</div>
+            <div class="col append col-20 data-right">
+              <a class="button button-icon button-small icon ion-android-arrow-dropright-circle" ng-click="nextDailyduty()"></a>
+            </div>
+          </div>
+        </div>
+        <div class="row row-no-padding" >
+          <div class="col">
+            <div class="box">
+              <div class="row title">
+                <div class="col">근태현황</div>
+              </div>
+              <div class="row append title">
+                <div class="col" ng-if="dailyduty.workdt">{{dailyduty.week}}요일</div>
+                <div class="col" ng-if="!dailyduty.workdt">&nbsp;</div>
+              </div>
+            </div>
+          </div><!-- end 1st col -->
+          <div class="col">
+            <div class="box">
+              <div class="row title">
+                <div class="col">실근태시간</div>
+              </div>
+              <div class="row sum">
+                <div class="col">합계</div>
+                <div class="col">{{dailyduty.total_time | number:0}}</div>
+              </div>
+            </div>
+          </div><!-- end 2nd col -->
+          <div class="col">
+            <div class="box">
+              <div class="row title">
+                <div class="col">근태인정시간</div>
+              </div>
+              <div class="row sum">
+                <div class="col">합계</div>
+                <div class="col">{{dailyduty.total2_time | number:0}}</div>
+              </div>
+            </div>
+          </div><!-- end 3rd col -->
+        </div>
+        <div class="row row-no-padding" ng-if="!dailyduty.workdt" >
+          <div class="col">
+            <div class="box" >
+              <div class="row message">
+                <div class="col">자료가 없습니다.</div>
+              </div>
+            </div>  
+            <div class="row">
+              <div class="col" style="height:450px;">
+              </div>  
+            </div>      
+          </div>
+        </div>
+
+        <div class="row row-no-padding" ng-if="dailyduty.workdt" >
+          <!-- 근태현황 -->
+          <div class="col">
+            <div class="box">
+              <div class="row">
+                <div class="col">근태</div>
+                <div class="col">{{dailyduty.worknm}}</div>
+              </div>
+              <div class="row">
+                <div class="col">출근</div>
+                <div class="col">{{dailyduty.start_tm | ttime}}</div>
+              </div>
+              <div class="row">
+                <div class="col">퇴근</div>
+                <div class="col">{{dailyduty.end_tm | ttime}}</div>
+              </div>
+              <div class="row">
+                <div class="col">외출</div>
+                <div class="col">{{dailyduty.out_tm | ttime}}</div>
+              </div>
+              <div class="row">
+                <div class="col">귀사</div>
+                <div class="col">{{dailyduty.in_tm | ttime}}</div>
+              </div>
+              <div class="row">
+                <div class="col">시간</div>
+                <div class="col">{{dailyduty.iotm }}</div>
+              </div>
+            </div><!-- end box -->
+            <div class="row">
+              <div class="col" style="height:260px;">
+              </div>  
+            </div>  
+          </div><!-- end 1st col -->
+          <!-- 실근태 -->
+          <div class="col">
+            <div class="box">
+              <div class="row">
+                <div class="col">지각</div>
+                <div class="col">{{dailyduty.late_time | number:0}}</div>
+              </div>
+              <div class="row">
+                <div class="col">외출</div>
+                <div class="col">{{dailyduty.out_time | number:0}}</div>
+              </div>
+              <div class="row">
+                <div class="col">평근</div>
+                <div class="col">{{dailyduty.nor_time | number:0}}</div>
+              </div>
+              <div class="row">
+                <div class="col">주특</div>
+                <div class="col">{{dailyduty.ot1_time | number:0}}</div>
+              </div>
+              <div class="row">
+                <div class="col">야특</div>
+                <div class="col">{{dailyduty.ot2_time | number:0}}</div>
+              </div>
+              <div class="row">
+                <div class="col">야근</div>
+                <div class="col">{{dailyduty.night_time | number:0}}</div>
+              </div>
+              <div class="row">
+                <div class="col">휴1</div>
+                <div class="col">{{dailyduty.week1_time | number:0}}</div>
+              </div>
+              <div class="row">
+                <div class="col">휴2</div>
+                <div class="col">{{dailyduty.week2_time | number:0}}</div>
+              </div>
+              <div class="row">
+                <div class="col">유급</div>
+                <div class="col">{{dailyduty.paid1_time | number:0}}</div>
+              </div>
+            </div><!-- end box -->
+          </div><!-- end 2nd col -->
+          <!-- 근태인정 -->
+          <div class="col">
+            <div class="box">
+              <div class="row">
+                <div class="col">&nbsp;</div>
+              </div>
+              <div class="row append">
+                <div class="col">&nbsp;</div>
+              </div>
+              <div class="row">
+                <div class="col">평근</div>
+                <div class="col">{{dailyduty.nor_time_s | number:0}}</div>
+              </div>
+              <div class="row">
+                <div class="col">주특</div>
+                <div class="col">{{dailyduty.ot1_time_s | number:0}}</div>
+              </div>
+              <div class="row">
+                <div class="col">야특</div>
+                <div class="col">{{dailyduty.ot2_time_s | number:0}}</div>
+              </div>
+              <div class="row">
+                <div class="col">야근</div>
+                <div class="col">{{dailyduty.night_time_s | number:0}}</div>
+              </div>
+              <div class="row">
+                <div class="col">휴1</div>
+                <div class="col">{{dailyduty.week1_time_s | number:0}}</div>
+              </div>
+              <div class="row">
+                <div class="col">휴2</div>
+                <div class="col">{{dailyduty.week2_time_s | number:0}}</div>
+              </div>
+              <div class="row">
+                <div class="col">유급</div>
+                <div class="col">{{dailyduty.paid1_time_s | number:0}}</div>
+              </div>
+            </div><!-- end box -->
+          </div><!-- end 3rd col -->
+        </div>
+      </ion-slide><!-- end 근태현황 -->
+      <!-- ------------------------------------------------------- -->
+      <!-- 연차현황                                                -->
+      <!-- ------------------------------------------------------- -->
+      <ion-slide ion-slide-tab-label="연차현황" class="mobp-view duty-view">
+        <div class="box">
+          <div class="row caption">
+            <div class="col col-20 data-left">
+              <a class="button button-icon button-small icon ion-android-arrow-dropleft-circle" ng-click="prevVacation()"></a>
+            </div>
+            <div class="col append">{{year | tyear:'년'}} 연차사용현황</div>
+            <div class="col append col-20 data-right">
+              <a class="button button-icon button-small icon ion-android-arrow-dropright-circle" ng-click="nextVacation()"></a>
+            </div>
+          </div>
+        </div>
+
+        <div class="box">
+          <div class="row header">
+            <div class="col">소속</div>
+            <div class="col">사번</div>
+            <div class="col">성명</div>
+          </div>
+          <div class="row">
+            <div class="col">{{vacation.employee.dept_nm}}</div>
+            <div class="col data-text">{{vacation.employee.empno}}</div>
+            <div class="col">{{vacation.employee.empname}}</div>
+          </div>
+          <div class="row header">
+            <div class="col">직급</div>
+            <div class="col">입사</div>
+            <div class="col">근속년</div>
+          </div>
+          <div class="row">
+            <div class="col">{{vacation.employee.class_nm}}</div>
+            <div class="col">{{vacation.employee.enter_dt}}</div>
+            <div class="col">{{vacation.employee.term_yr}}</div>
+          </div>
+        </div>
+        <div class="box">
+          <div class="row title">
+            <div class="col">연차</div>
+            <div class="col">무급</div>
+          </div>
+          <div class="row header">
+            <div class="col">총계</div>
+            <div class="col">사용</div>
+            <div class="col">잔여</div>
+            <div class="col">총계</div>
+            <div class="col">사용</div>
+            <div class="col">잔여</div>
+          </div>
+          <div class="row message" ng-if="!vacation.master.year_total">
+            <div class="col">자료가 없습니다.</div>
+          </div>
+          <div class="row" ng-if="vacation.master.year_total">
+            <div class="col">{{vacation.master.year_total}}</div>
+            <div class="col">{{vacation.master.year_used}}</div>
+            <div class="col">{{vacation.master.year_remain}}</div>
+            <div class="col">{{vacation.master.unpaid_total}}</div>
+            <div class="col">{{vacation.master.unpaid_used}}</div>
+            <div class="col">{{vacation.master.unpaid_remain}}</div>
+          </div>
+        </div>
+        <!-- vc scroll -->
+        <div class="box">
+          <div class="row header">
+            <div class="col col-10">순</div>
+            <div class="col col-25">구분</div>
+            <div class="col col-25">사용일</div>
+            <div class="col">사유</div>
+          </div>
+          <div class="row message" ng-if="vacation.details.length === 0">
+            <div class="col">자료가 없습니다.</div>
+          </div>
+        </div>
+        <ion-scroll direction="y" class="vc-scroll" delegate-handle="vc-handle" ng-if="vacation.details.length > 0">
+          <div class="box box-vc">
+            <div class="row" ng-repeat="detail in vacation.details">
+              <div class="col col-10">{{$index+1}}</div>
+              <div class="col col-25">{{detail.vacation_cd}}</div>
+              <div class="col col-25">{{detail.used_dt}}</div>
+              <div class="col data-desc">{{detail.reason}}</div>
+            </div>
+            <div class="row" ng-if="vacation.details.length > 10">
+              <div class="col">
+                <button class="button button-small button-positive icon-right ion-arrow-up-c" ng-click="scrollVcToTop()">
+                  위로 이동
+                </button>
+              </div>        
+            </div>
+          </div>
+        </ion-scroll>  
+      </ion-slide><!-- end 연차사용현황 -->
+      <!-- ------------------------------------------------------- -->
+      <!-- 잔업신청현황                                            -->
+      <!-- ------------------------------------------------------- -->
+      <ion-slide ion-slide-tab-label="잔업신청현황" class="mobp-view duty-view">
+        <div class="box">
+          <div class="row caption">
+            <div class="col col-20 data-left">
+              <a class="button button-icon button-small icon ion-android-arrow-dropleft-circle" ng-click="prevOvertime()"></a>
+            </div>
+            <div class="col append">{{month | tmonth:'-'}} 잔업신청현황</div>
+            <div class="col append col-20 data-right">
+              <a class="button button-icon button-small icon ion-android-arrow-dropright-circle" ng-click="nextOvertime()"></a>
+            </div>
+          </div>
+        </div>
+        <div class="box">
+          <div class="row header bottom">
+            <div class="col col-25">신청일</div>
+            <div class="col">주특</div>
+            <div class="col">야특</div>
+            <div class="col">휴일1</div>
+            <div class="col">휴일2</div>
+            <div class="col">조출</div>
+          </div>
+          <div class="row message" ng-if="!overtimes || overtimes.length === 0">
+            <div class="col">자료가 없습니다.</div>
+          </div>
+        </div>
+        <ion-scroll direction="y" class="ot-scroll" delegate-handle="ot-handle" ng-if="overtimes.length > 0">
+          <div class="box box-ot">
+            <div class="row" ng-repeat="overtime in overtimes">
+              <div class="col col-25">{{overtime.workdt}}</div>
+              <div class="col">{{overtime.ot1_time | number:0}}</div>
+              <div class="col">{{overtime.ot2_time | number:0}}</div>
+              <div class="col">{{overtime.week1_time | number:0}}</div>
+              <div class="col">{{overtime.week2_time | number:0}}</div>
+              <div class="col">{{overtime.early_time | number:0}}</div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <button class="button button-small button-positive icon-right ion-arrow-up-c" ng-click="scrollOtToTop()">
+                  위로 이동
+                </button>
+              </div>        
+            </div>
+          </div><!-- end box -->
+        </ion-scroll><!-- end ion-scroll for scroll -->
+      </ion-slide><!-- end 잔업신청현황 -->
+
+    </ion-slide-box>  
+  </ion-content>
+</ion-view>

@@ -1,0 +1,14 @@
+[
+	{
+		"id":"salary",
+		"title":"급여",
+		"image":"img/programs/salary.jpg",
+		"sref" : "app.salary-months"
+	},
+	{
+		"id":"dailyduty",
+		"title":"일근태",
+		"image":"img/programs/dailyduty.jpg",
+		"sref" : "app.dailyduty"
+	}
+]
