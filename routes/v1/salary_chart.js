@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (c) 2014, COPYRIGHTⓒ2014 eBiz-Pro. ALL RIGHTS RESERVED.
  *
  */
@@ -51,9 +51,9 @@ function salary(req, res, next) {
         '    fee_union             as "fee_union"             ,' +
         '    user_defined_deduct   as "user_defined_deduct"    ' +
         'from salary ' +
-        'where pay_month = :month and empno = :empno ',
+        'where pay_month LIKE :month and empno = :empno ',
         {
-            month: 'substr(' + req.params.month + ', 1, 4)' + '%', 
+            month: req.params.month.substring(0,4) + '%', 
             empno: req.user.empno
         },
         { outFormat: database.OBJECT }
@@ -123,9 +123,9 @@ function monthlyDuty(req, res, next) {
         '    time_paid2_time +                            ' +
         '    time_allowed_time   as "total_time"          ' +
         'from monthlyduty ' +
-        'where pay_month = :month and empno = :empno ',
+        'where pay_month LIKE :month and empno = :empno ',
         {
-            month: 'substr(' + req.params.month + ', 1, 4)' + '%', 
+            month: req.params.month.substring(0,4) + '%', 
             empno: req.user.empno
         },
         { outFormat: database.OBJECT//, maxRows: 4000
